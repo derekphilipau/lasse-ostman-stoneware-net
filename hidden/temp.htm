@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+
+<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
+<title>Temperature</title>
+</head>
+
+<body background="../textbilder/bakgrunder/lankar.gif">
+
+<h2 align="center"><script language="JavaScript">
+
+
+
+function checkSpaces( numStr, fieldName )
+
+{
+
+   var str = numStr.value;
+
+   var spacesOnly = true;
+
+
+
+   for ( var i = 0; i < str.length; i++ )
+
+   {
+
+      var ch = str.substring( i, i+1 );
+
+
+
+      if ( ch != ' ' )
+
+      {
+
+         spacesOnly = false;
+
+      }
+
+   }
+
+
+
+   if ( spacesOnly == true )
+
+   {
+
+      numStr.value = "";
+
+   }
+
+
+
+   return true;
+
+}
+
+
+
+
+
+function checkNumber( numStr, fieldName )
+
+{
+
+   msg = fieldName + " field has invalid data : \"" + numStr.value + "\"";
+
+   var str = numStr.value;
+
+   var haveDecimalPoint = false;
+
+   var haveNegativeSign = false;
+
+
+
+   for ( var i = 0; i < str.length; i++ )
+
+   {
+
+      var ch = str.substring( i, i+1 );
+
+
+
+
+
+      if ( ch == ' ' )
+
+      {
+
+         alert( fieldName + " number may not contain spaces : \"" + numStr.value + "\"" );
+
+         numStr.value = "";
+
+         return false;
+
+      }
+
+
+
+     
+
+      if ( ch == '-' )
+
+      {  // and make sure that the negative sign is not the only character
+
+         if ( ( haveNegativeSign == false ) && ( str.length != 1 ) && ( i == 0 ) )
+
+         {
+
+            haveNegativeSign = true;
+
+         }
+
+         else
+
+         {
+
+            alert( msg );
+
+            return false;
+
+         }
+
+      }
+
+
+
+      
+
+      if ( ch == '.' )
+
+      {  // and make sure that the decimal point is not the only character
+
+         if ( ( haveDecimalPoint == false ) && ( str.length != 1 ) )
+
+         {
+
+            haveDecimalPoint = true;
+
+         }
+
+         else
+
+         {
+
+            alert( msg );
+
+            return false;
+
+         }
+
+      }
+
+
+
+      
+
+      if ( ( ch != '.' ) && ( ch != '-' ) && ( ch < "0" || ch > "9" ) )
+
+      {
+
+         alert( msg );
+
+         return false;
+
+      }
+
+   }
+
+
+
+   return true;
+
+}
+
+
+
+
+
+function computeForm( form )
+
+{
+
+   
+
+   if ( ( form.fdegrees.value == null || form.fdegrees.value.length == 0 ) &&
+
+        ( form.cdegrees.value == null || form.cdegrees.value.length == 0 ) )
+
+   {
+
+      alert( "Error : Both Fields Are Empty" );
+
+      return;
+
+   }
+
+
+
+   checkSpaces( form.cdegrees, "Celsius"    );
+
+   checkSpaces( form.fdegrees, "Fahrenheit" );
+
+
+
+   
+
+   if ( ( form.fdegrees.value != null && form.fdegrees.value.length > 0 ) &&
+
+        ( form.cdegrees.value != null && form.cdegrees.value.length > 0 ) )
+
+   {
+
+      alert( "Error : Both Fields Are Populated" );
+
+      return;
+
+   }
+
+
+
+  
+
+   if ( ( form.fdegrees.value == null || form.fdegrees.value.length == 0 ) &&
+
+        ( form.cdegrees.value != null && form.cdegrees.value.length >  0 ) )
+
+   {
+
+      if ( checkNumber( form.cdegrees, "Celsius" ) )
+
+      {
+
+         var degs = form.cdegrees.value;
+
+         degs = ( ( degs ) * ( 9.0/5.0 ) ) + 32;
+
+         form.fdegrees.value = degs;
+
+      }
+
+   }
+
+
+
+  
+
+   if ( ( form.fdegrees.value != null && form.fdegrees.value.length >  0 ) &&
+
+        ( form.cdegrees.value == null || form.cdegrees.value.length == 0 ) )
+
+   {
+
+      if ( checkNumber( form.fdegrees, "Fahrenheit" ) )
+
+      {
+
+         var degs = form.fdegrees.value;
+
+         degs = ( degs - 32 ) * ( 5.0/9.0 );
+
+         form.cdegrees.value = degs;
+
+      }
+
+   }
+
+}
+
+
+
+
+
+function clearForm( form )
+
+{
+
+   form.fdegrees.value = "";
+
+   form.cdegrees.value = "";
+
+}
+
+
+
+</script></h2>
+
+<form>
+    <div align="center"><center><table border="0" width="160">
+        <tr>
+            <td width="40"><font color="#FF0000" size="2" face="Arial"><sup><sup><strong>o</strong></sup></sup><strong>F:</strong></font><font face="Arial"><strong> </strong></font></td>
+            <td align="center" width="60"><input type="text" size="5" name="fdegrees"></td>
+            <td align="center" width="60"><input type="button" value="Go!" onclick="computeForm(this.form)"></td>
+        </tr>
+        <tr>
+            <td width="40"><font color="#FF0000" size="2" face="Arial"><sup><sup><strong>o</strong></sup></sup><strong>C:
+            </strong></font></td>
+            <td align="center" width="60"><input type="text" size="5" name="cdegrees"></td>
+            <td align="center" width="60"><input type="button" value="Reset" onclick="clearForm(this.form)"></td>
+        </tr>
+    </table>
+    </center></div>
+</form>
+</body>
+</html>
